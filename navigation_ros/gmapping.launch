@@ -1,0 +1,44 @@
+<?xml version="1.0" ?>
+<launch>
+
+  <!-- Arguments -->
+  <arg name="scan_topic" default="scan" />
+  <arg name="base_frame" default="base_link" />
+  <arg name="odom_frame" default="odom" />
+  <arg name="map_frame" default="map" />
+
+  <!-- Gmapping -->
+  <node pkg="gmapping" type="slam_gmapping" name="slam_gmapping" output="screen">
+    <param name="base_frame" value="$(arg base_frame)" />
+    <param name="odom_frame" value="$(arg odom_frame)" />
+    <param name="map_update_interval" value="0.2" /> <!--How long between updates to the map-->
+    <param name="maxUrange" value="20.0" /> <!--The maximum usable range of the laser used for map building. A beam is cropped to this value. -->
+    <param name="sigma" value="0.05" /><!--standard deviation for the scan matching process-->
+    <param name="kernelSize" value="1" /><!--search window for scan matching. The kernel in which to look for a correspondence -->
+    <param name="lstep" value="0.05" /><!--Initial search step for scan matching. Optimization step in translation-->
+    <param name="astep" value="0.05" /><!--Initial search step for scan matching(angular). Optimization step in rotation-->
+    <param name="iterations" value="5" /><!--No. of iteration for scan matcher-->
+    <param name="lsigma" value="0.075" /><!--Sigma of beam used for likelihood computation-->
+    <param name="ogain" value="3.0" /><!--Gain to be used for likelihood-->
+    <param name="lskip" value="0" /> <!--No of beams to skip in each scan-->
+    <param name="minimumScore" value="200" /><!--Minimum score to consider scan matching is good-->
+    <param name="srr" value="0.01" /><!--Odomtery error in translation as a funcn of translation-->
+    <param name="srt" value="0.02" /><!--Odomtery error in translation as a funcn of rotation-->
+    <param name="str" value="0.01" /><!--Odomtery error in rotation as a funcn of translation-->
+    <param name="stt" value="0.02" /><!--Odomtery error in rssssotation as a funcn of rotation-->
+    <param name="linearUpdate" value="0.5" /> <!--Make a scan(new measurement) if robot moves this far-->
+    <param name="angularUpdate" value="0.436" /><!--Make a scan if robot rotates this far-->
+    <param name="temporalUpdate" value="-1.0" /><!--Make a scan if this much time has passed-->
+    <param name="resampleThreshold" value="0.5" />
+    <param name="particles" value="80" /> <!--No of particles in the filter-->
+    <param name="xmin" value="-1.0" /><!--Down 4 are initial map size-->
+    <param name="ymin" value="-1.0" />
+    <param name="xmax" value="1.0" />
+    <param name="ymax" value="1.0" />
+    <param name="delta" value="0.05" /> <!-- Resolution of the map (meter/occupancy grid)-->
+    <param name="llsamplerange" value="0.01" /><!--Translational sampling range for the likelihood -->
+    <param name="llsamplestep" value="0.01" /><!--Translational sampling step for the likelihood -->
+    <param name="lasamplerange" value="0.005" /><!--Angular sampling range for the likelihood -->
+    <param name="lasamplestep" value="0.005" /><!--Angular sampling steps for the likelihood -->
+  </node>
+</launch>

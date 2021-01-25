@@ -1,0 +1,29 @@
+<?xml version="1.0" ?>
+<launch>
+    <include file="$(find navigation_ros)/gmapping.launch" />
+ <!-- Run the map server --> 
+ <!-- This would mean that you have a static map given already and then you apply amcl to localize-->
+ <!-- But there we wre using gmapping which is laser based SLAM. So we donot need amcl and static map-->   
+    <!--node name="map_server" pkg="map_server" type="map_server" args="$(find my_map_package)/my_map.pgm my_map_resolution"/-->
+
+ <!--- Run AMCL --> 
+    <!--include file="$(find amcl)/examples/amcl_omni.launch" /-->
+
+   <node pkg="move_base" type="move_base" respawn="false" name="move_base" output="screen">
+    
+    <!--This is added only if you want to use DWA planner other wise just use
+     base local planner.yaml code line below and remove this line. -->
+    <param name="base_local_planner" value="dwa_local_planner/DWAPlannerROS" />
+    
+    <rosparam file="$(find navigation_ros)/costmap_common_params.yaml" command="load" ns="global_costmap" /> 
+    <rosparam file="$(find navigation_ros)/costmap_common_params.yaml" command="load" ns="local_costmap" />
+    <rosparam file="$(find navigation_ros)/local_costmap_params.yaml" command="load" />
+    <rosparam file="$(find navigation_ros)/global_costmap_params.yaml" command="load" /> 
+    <!--rosparam file="$(find navigation_ros)/base_local_planner_params.yaml" command="load" /-->
+    <rosparam file="$(find navigation_ros)/dwa_local_planner_params.yaml" command="load" />
+    <!--Even if the code below is removed, our bot will be still be navigating. 
+    Because then all the default values of params will be used in the node.-->
+    <rosparam file="$(find navigation_ros)/move_base_params.yaml" command="load" />
+ </node>
+
+</launch> 
